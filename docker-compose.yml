@@ -1,0 +1,28 @@
+services:
+  secretsanta.http.api:
+    image: ${DOCKER_REGISTRY-}secretsantahttpapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - "8080:8080"
+      - "4443:4443"
+
+  secretsanta.database:
+    image: postgres:latest
+    container_name: secretsanta.database
+    environment:
+      - POSTGRES_DB=secretsanta.dev
+      - POSTGRES_USER=secretsanta_app.dev
+      - POSTGRES_PASSWORD=secretsanta
+    volumes:
+      - ./.containers/secretsanta-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+   
+  secretsanta.companionsdatabase:
+    image: mongo:latest
+    container_name: secretsanta.companions
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: secretsanta.dev
+        MONGO_INITDB_ROOT_PASSWORD: secretsanta 
